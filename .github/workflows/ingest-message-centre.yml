@@ -1,0 +1,16 @@
+on:
+    schedule:
+        - cron: '0 2 * * *' # Runs every day at 2 AM UTC
+jobs:
+    ingest:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+            - name: Run ingestion script
+              run: pwsh ./deployment/scripts/ingest-message-centre.ps1
+              env:
+                INGESTION_CLIENT_ID: ${{ secrets.INGESTION_CLIENT_ID }}
+                INGESTION_CLIENT_SECRET: ${{ secrets.INGESTION_CLIENT_SECRET }}
+                DEPLOYMENT_TENANT_ID: ${{ secrets.DEPLOYMENT_TENANT_ID }}
+                SHAREPOINT_SITE_URL: ${{ secrets.SHAREPOINT_SITE_URL }}
