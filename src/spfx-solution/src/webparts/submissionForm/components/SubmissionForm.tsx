@@ -1,43 +1,67 @@
 import * as React from 'react';
 import styles from './SubmissionForm.module.scss';
-import type { ISubmissionFormProps } from './ISubmissionFormProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { ISubmissionFormProps } from './ISubmissionFormProps';
 
-export default class SubmissionForm extends React.Component<ISubmissionFormProps> {
-  public render(): React.ReactElement<ISubmissionFormProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
+const priorities = ['High', 'Medium', 'Low'];
 
-    return (
-      <section className={`${styles.submissionForm} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
-        </div>
-      </section>
-    );
-  }
-}
+const SubmissionForm: React.FC<ISubmissionFormProps> = (props): JSX.Element => {
+  const [title, setTitle] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [priority, setPriority] = React.useState(priorities[1]);
+  const [status, setStatus] = React.useState('Submitted');
+  const [loading, setLoading] = React.useState(false);
+  const [success, setSuccess] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+    setLoading(true);
+    setSuccess('');
+    setError('');
+    try {
+      await props.sp.web.lists.getByTitle('Internal Change Requests').items.add({
+        Title: title,
+        Description: description,
+        Priority: priority,
+        Status: status
+      });
+      setSuccess('Change request submitted successfully!');
+      setTitle('');
+      setDescription('');
+      setPriority(priorities[1]);
+      setStatus('Submitted');
+    } catch {
+      setError('Error submitting change request. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  return (
+    <form className={styles.submissionForm} onSubmit={handleSubmit}>
+      <h2>Submit Internal Change Request</h2>
+      {success && <div className={styles.success}>{success}</div>}
+      {error && <div className={styles.error}>{error}</div>}
+      <div>
+        <label>Title</label>
+        <input type="text" value={title} onChange={e => setTitle(e.target.value)} required />
+      </div>
+      <div>
+        <label>Description</label>
+        <textarea value={description} onChange={e => setDescription(e.target.value)} required />
+      </div>
+      <div>
+        <label>Priority</label>
+        <select value={priority} onChange={e => setPriority(e.target.value)}>
+          {priorities.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+      </div>
+      <div>
+        <label>Status</label>
+        <input type="text" value={status} onChange={e => setStatus(e.target.value)} readOnly />
+      </div>
+      <button type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit'}</button>
+    </form>
+  );
+};
+
+export default SubmissionForm;
