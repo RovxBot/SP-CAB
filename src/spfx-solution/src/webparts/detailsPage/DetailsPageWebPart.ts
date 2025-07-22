@@ -18,18 +18,23 @@ export interface IDetailsPageWebPartProps {
 
 export default class DetailsPageWebPart extends BaseClientSideWebPart<IDetailsPageWebPartProps> {
 
-  private _isDarkTheme: boolean = false;
-  private _environmentMessage: string = '';
-
   public render(): void {
+    const mockChange = {
+      Title: "Sample Change",
+      Description: "This is a sample change request.",
+      Status: "Submitted",
+      Priority: "High",
+      CreatedDate: "2025-07-22",
+      ModifiedDate: "2025-07-22"
+      // Add other fields as needed
+    };
+
     const element: React.ReactElement<IDetailsPageProps> = React.createElement(
       DetailsPage,
       {
-        description: this.properties.description,
-        isDarkTheme: this._isDarkTheme,
-        environmentMessage: this._environmentMessage,
-        hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        change: mockChange,
+        auditLog: [],
+        // Optionally add onApprove, onReject, etc.
       }
     );
 
@@ -38,11 +43,9 @@ export default class DetailsPageWebPart extends BaseClientSideWebPart<IDetailsPa
 
   protected onInit(): Promise<void> {
     return this._getEnvironmentMessage().then(message => {
-      this._environmentMessage = message;
+      // Removed: this._environmentMessage = message;
     });
   }
-
-
 
   private _getEnvironmentMessage(): Promise<string> {
     if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
@@ -76,7 +79,6 @@ export default class DetailsPageWebPart extends BaseClientSideWebPart<IDetailsPa
       return;
     }
 
-    this._isDarkTheme = !!currentTheme.isInverted;
     const {
       semanticColors
     } = currentTheme;
@@ -86,7 +88,6 @@ export default class DetailsPageWebPart extends BaseClientSideWebPart<IDetailsPa
       this.domElement.style.setProperty('--link', semanticColors.link || null);
       this.domElement.style.setProperty('--linkHovered', semanticColors.linkHovered || null);
     }
-
   }
 
   protected onDispose(): void {
