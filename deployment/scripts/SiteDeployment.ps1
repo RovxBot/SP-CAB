@@ -1,6 +1,9 @@
 # Add new site for deployment.
 $SiteUrl = $env:DEPLOYMENT_SITE_URL
 $SiteOwner = $env:DEPLOYMENT_SITE_OWNER
+$certPath = "./deployment/scripts/CABDeployment.pfx"
+
+Connect-PnPOnline -Url $env:DEPLOYMENT_SITE_URL -ClientId $env:INGESTION_CLIENT_ID -Tenant $env:DEPLOYMENT_TENANT_ID -CertificatePath $certPath -CertificatePassword ""
 
 if (-not (Get-PnPTenantSite | Where-Object { $_.Url -eq $SiteUrl })) {
     New-PnPSite -Type CommunicationSite -Title "CAB Site" -Url "$SiteUrl" -Owner "$SiteOwner"
