@@ -1,0 +1,21 @@
+name: Deploy SharePoint Site
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install PowerShell
+        run: sudo apt-get install -y powershell
+
+      - name: Run site deployment script
+        run: pwsh ./deployment/scripts/SiteDeployment.ps1
+        env:
+          DEPLOYMENT_SITE_URL: ${{ secrets.DEPLOYMENT_SITE_URL }}
+          DEPLOYMENT_SITE_OWNER: ${{ secrets.DEPLOYMENT_SITE_OWNER }}
+          # Add any other required secrets for authentication
