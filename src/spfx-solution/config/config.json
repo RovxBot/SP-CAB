@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "change-dashboard-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/changeDashboard/ChangeDashboardWebPart.js",
+          "manifest": "./src/webparts/changeDashboard/ChangeDashboardWebPart.manifest.json"
+        }
+      ]
+    },
+    "submission-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/submissionForm/SubmissionFormWebPart.js",
+          "manifest": "./src/webparts/submissionForm/SubmissionFormWebPart.manifest.json"
+        }
+      ]
+    },
+    "details-page-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/detailsPage/DetailsPageWebPart.js",
+          "manifest": "./src/webparts/detailsPage/DetailsPageWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ChangeDashboardWebPartStrings": "lib/webparts/changeDashboard/loc/{locale}.js",
+    "SubmissionFormWebPartStrings": "lib/webparts/submissionForm/loc/{locale}.js",
+    "DetailsPageWebPartStrings": "lib/webparts/detailsPage/loc/{locale}.js"
+  }
+}

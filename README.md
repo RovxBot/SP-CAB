@@ -31,6 +31,12 @@ Certificate command: (Command is for MacOS with foward slashes, adjust for Windo
       - Used for ongoing scheduled tasks (e.g., Microsoft Message Center ingestion via Graph API, Power Automate, or Azure Automation). 
       - Needs Microsoft Graph permissions (e.g., ServiceHealth.Read) and SharePoint list access.
 - [ ] All secrets stored within Github Secrets to allow for their use in GitHub Actions workflows.
+- [ ] Install Yeoman and SharePoint Generator globally:
+
+  ```bash
+  npm install -g yo @microsoft/generator-sharepoint
+  ```
+
 
 | Secret Name | Description |
 |-------------|-------------|
@@ -48,6 +54,8 @@ Certificate command: (Command is for MacOS with foward slashes, adjust for Windo
 ### 1. **Repository Setup**
 - [ ] Create a **GitHub Repository** for the project.
 - [ ] Structure folders for:
+
+```
 /
 ├── .github/
 │   └── workflows/                # GitHub Actions workflows (CI/CD)
@@ -56,6 +64,7 @@ Certificate command: (Command is for MacOS with foward slashes, adjust for Windo
 ├── src/
 │   └── spfx-solution/            # SPFx solution (React web parts)
 └── README.md  
+```
 
 ---
 
@@ -79,6 +88,14 @@ Certificate command: (Command is for MacOS with foward slashes, adjust for Windo
 - [ ] Initialize a **SharePoint Framework (SPFx)** solution:
   - Use React as the UI framework.
 - [ ] Develop web parts:
+
+```bash
+yo @microsoft/generator-sharepoint
+
+Name: SP-CAB
+Webpart
+Name: Change Dashboard
+```
   - **Change Dashboard**: List all internal and Microsoft changes with filters, including user priority and category filtering for Microsoft changes.
   - **Change Submission Form**: Form for submitting internal change requests.
   - **Change Details Page**: View and manage specific change requests.
