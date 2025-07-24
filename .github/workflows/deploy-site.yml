@@ -12,10 +12,16 @@ jobs:
 
       - name: Install PowerShell
         run: sudo apt-get install -y powershell
+      
+      - name: Install PnP PowerShell
+        run: |
+          Install-Module -Name PnP.PowerShell -Force -Scope CurrentUser
+        shell: pwsh
 
       - name: Run site deployment script
         run: pwsh ./deployment/scripts/SiteDeployment.ps1
         env:
           DEPLOYMENT_SITE_URL: ${{ secrets.DEPLOYMENT_SITE_URL }}
           DEPLOYMENT_SITE_OWNER: ${{ secrets.DEPLOYMENT_SITE_OWNER }}
-          # Add any other required secrets for authentication
+          DEPLOYMENT_CLIENT_ID: ${{ secrets.DEPLOYMENT_CLIENT_ID }}
+          DEPLOYMENT_TENANT_ID: ${{ secrets.DEPLOYMENT_TENANT_ID }}
