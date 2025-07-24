@@ -1,0 +1,39 @@
+name: Deploy SPFx Solution
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: src/spfx-solution
+
+      - name: Bundle SPFx solution
+        run: gulp bundle --ship
+        working-directory: src/spfx-solution
+
+      - name: Package SPFx solution
+        run: gulp package-solution --ship
+        working-directory: src/spfx-solution
+
+      - name: Upload .sppkg to SharePoint App Catalog
+        run: pwsh ./deployment/scripts/deploy-spfx.ps1
+        env:
+          DEPLOYMENT_CLIENT_ID: ${{ secrets.DEPLOYMENT_CLIENT_ID }}
+          DEPLOYMENT_TENANT_ID: ${{ secrets.DEPLOYMENT_TENANT_ID }}
+          SHAREPOINT_APP_CATALOG_URL: ${{ secrets.SHAREPOINT_APP_CATALOG_URL }}
+          SHAREPOINT_SITE_URL: ${{ secrets.DEPLOYMENT_SITE_URL }}

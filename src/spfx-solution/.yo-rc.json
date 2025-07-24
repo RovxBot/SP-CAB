@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "nodeVersion": "22.15.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "sp-cab",
+    "libraryId": "09a0ef6d-e9a5-4d53-bc0d-5e89ccb206f8",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "SP-CAB",
+    "solutionShortDescription": "SP-CAB description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

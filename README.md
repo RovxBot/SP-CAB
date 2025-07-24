@@ -19,10 +19,25 @@ The prototype must be fully functional without placeholder/demo data.
    - Deployment Service Principal
       - Used by GitHub Actions (CI/CD) for deploying SPFx solutions, running PnP.PowerShell scripts, and site/list provisioning.
       - Needs permissions for SharePoint site/app catalog and PnP.PowerShell certificate.
+
+Certificate command: (Command is for MacOS with foward slashes, adjust for Windows if required)
+
+      ```powershell
+      Import-Module PnP.PowerShell
+      New-PnPAzureCertificate -CommonName "CABDeployment" -OutPfx "/Users/USER/Git/CABDeployment.pfx" -OutCert "/Users/USER/Git/CABDeployment.cer" -CertificatePassword (ConvertTo-SecureString -String "pass@word1" -AsPlainText -Force) -ValidYears 30
+      ```
+
    - Ingestion/Automation Service Principal
       - Used for ongoing scheduled tasks (e.g., Microsoft Message Center ingestion via Graph API, Power Automate, or Azure Automation). 
       - Needs Microsoft Graph permissions (e.g., ServiceHealth.Read) and SharePoint list access.
 - [ ] All secrets stored within Github Secrets to allow for their use in GitHub Actions workflows.
+- [ ] Install Yeoman and SharePoint Generator globally:
+
+  ```bash
+  npm install -g yo @microsoft/generator-sharepoint
+  ```
+
+
 | Secret Name | Description |
 |-------------|-------------|
 | DEPLOYMENT_CLIENT_ID | Deployment service principal client ID |
@@ -33,11 +48,14 @@ The prototype must be fully functional without placeholder/demo data.
 | INGESTION_CLIENT_ID | Ingestion/automation service principal ID |
 | INGESTION_CLIENT_SECRET | Auth for ingestion/automation principal |
 | WEBHOOK_URLS | Notification endpoints |
+
 - [ ] PnP PowerShell certificates generated
 
 ### 1. **Repository Setup**
 - [ ] Create a **GitHub Repository** for the project.
 - [ ] Structure folders for:
+
+```
 /
 ├── .github/
 │   └── workflows/                # GitHub Actions workflows (CI/CD)
@@ -46,6 +64,7 @@ The prototype must be fully functional without placeholder/demo data.
 ├── src/
 │   └── spfx-solution/            # SPFx solution (React web parts)
 └── README.md  
+```
 
 ---
 
@@ -69,6 +88,14 @@ The prototype must be fully functional without placeholder/demo data.
 - [ ] Initialize a **SharePoint Framework (SPFx)** solution:
   - Use React as the UI framework.
 - [ ] Develop web parts:
+
+```bash
+yo @microsoft/generator-sharepoint
+
+Name: SP-CAB
+Webpart
+Name: Change Dashboard
+```
   - **Change Dashboard**: List all internal and Microsoft changes with filters, including user priority and category filtering for Microsoft changes.
   - **Change Submission Form**: Form for submitting internal change requests.
   - **Change Details Page**: View and manage specific change requests.
