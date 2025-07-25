@@ -51,8 +51,9 @@ function Makesure-PnPField  {
 
 # Internal changes list
 if (-not (Get-PnPList | Where-Object { $_.Title -eq "Internal Change Requests" })) {
-    Add-PnPList -Title "Internal Change Requests" -Template GenericList
+    New-PnPList -Title "Internal Change Requests" -Template GenericList
     Write-Host "List created: Internal Change Requests"
+    Start-Sleep -Seconds 5
 } else {
     Write-Host "List already exists: Internal Change Requests"
 }
@@ -65,8 +66,9 @@ Makesure-PnPField  -List "Internal Change Requests" -DisplayName "Modified Date"
 
 # Microsoft Changes List
 if (-not (Get-PnPList | Where-Object { $_.Title -eq "Microsoft Changes" })) {
-    Add-PnPList -Title "Microsoft Changes" -Template GenericList
+    New-PnPList -Title "Microsoft Changes" -Template GenericList
     Write-Host "List created: Microsoft Changes"
+    Start-Sleep -Seconds 5
 } else {
     Write-Host "List already exists: Microsoft Changes"
 }
